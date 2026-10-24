@@ -1,0 +1,15 @@
+server.port=8080
+server.servlet.context-path=/
+spring.application.name=payroll-system
+
+# Logging
+logging.level.root=WARN
+logging.level.com.payroll=INFO
+
+# Jackson
+spring.jackson.serialization.write-dates-as-timestamps=false
+spring.jackson.time-zone=UTC
+
+# Database (SQLite)
+spring.datasource.url=jdbc:sqlite:data/payroll.db
+spring.datasource.driver-class-name=org.sqlite.JDBC

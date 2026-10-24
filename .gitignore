@@ -1,0 +1,11 @@
+target/
+bin/
+*.jar
+*.class
+data/
+.idea/
+.vscode/
+*.iml
+.env
+*.logsrc/resources/application.properties
+src/resources/application.properties

@@ -1,0 +1,190 @@
+======================================================================
+HỆ THỐNG QUẢN LÝ LƯƠNG NHÂN VIÊN - PHIÊN BẢN 2.0
+======================================================================
+
+📁 CẤU TRÚC THƯ MỤC HOÀN CHỈNH
+
+01-test/
+├── 📂 src/                      ← SOURCE CODE (File .java)
+│   ├── Employee.java
+│   ├── SalaryEmployee.java
+│   ├── HourlyEmployee.java
+│   ├── DailyEmployee.java
+│   ├── TaxInsurance.java
+│   ├── AttendanceRecord.java
+│   ├── LoginPanel.java
+│   └── QLLuongVien.java
+│
+├── 📂 bin/                      ← COMPILED CODE (File .class - AUTO)
+│   ├── Employee.class
+│   ├── SalaryEmployee.class
+│   ├── HourlyEmployee.class
+│   ├── DailyEmployee.class
+│   ├── TaxInsurance.class
+│   ├── AttendanceRecord.class
+│   ├── LoginPanel.class
+│   ├── QLLuongVien.class
+│   └── QLLuongVien$*.class
+│
+├── 🔧 run.bat                   ← Script chạy ứng dụng (Windows)
+├── 🔧 compile.bat               ← Script biên dịch (Windows)
+├── ⚙️  build_and_run.ps1        ← PowerShell script (tự động)
+├── 📄 README.md                 ← Hướng dẫn chi tiết
+├── 📄 QUICK_START.md            ← Hướng dẫn nhanh
+├── 📄 HUONG_DAN_SU_DUNG.md      ← Hướng dẫn sử dụng tính năng
+└── 🚫 .gitignore                ← Không commit bin/
+
+======================================================================
+🚀 CÁCH CHẠY ỨNG DỤNG
+======================================================================
+
+[Cách 1] Double-click vào run.bat (DỄ NHẤT)
+         → Ứng dụng chạy ngay
+
+[Cách 2] PowerShell
+         → .\build_and_run.ps1 (Tự biên dịch + chạy)
+
+[Cách 3] Command Line
+         → java -cp bin QLLuongVien
+
+======================================================================
+📝 QUY TẮC VÀNG
+======================================================================
+
+✏️ CHỈNH SỬA FILE:
+   → Sửa các file trong src/
+   → Chạy compile.bat hoặc javac command
+   → Chạy run.bat hoặc java command
+
+❌ KHÔNG CHỈNH SỬA:
+   → Không được sửa file trong bin/
+   → Các file .class tự động generate từ .java
+
+======================================================================
+🔑 TÀI KHOẢN MẶC ĐỊNH
+======================================================================
+
+ADMIN:
+  Username: admin
+  Password: admin123
+  Quyền: Quản lý tất cả nhân viên
+
+USER:
+  Username: user
+  Password: user123
+  Quyền: Xem lương cá nhân
+
+DỮ LIỆU MẪU:
+  1. Nguyễn Văn A (ID 1001) - 5M/tháng - ADMIN
+  2. Trần Thị B (ID 1002) - 3M/tháng - USER
+  3. Lê Văn C (ID 1003) - 50k/giờ - USER
+  4. Phạm Thị D (ID 1004) - 150k/ngày - USER
+
+======================================================================
+✨ CÁC TÍNH NĂNG CHỦ YẾU
+======================================================================
+
+1. ĐĂNG NHẬP & PHÂN QUYỀN
+   - Login với 2 role: Admin + User
+   - Phân biệt quyền hạn
+
+2. TÍNH LƯƠNG CHI TIẾT
+   - Lương Gross (Trước trừ)
+   - Bảo Hiểm BHXH (5%) + BHYT (1.5%)
+   - Thuế PIT (Thuế thu nhập cá nhân)
+   - Lương Net (Thực lĩnh)
+
+3. QUẢN LÝ NHÂN VIÊN (Admin)
+   - Thêm/xóa nhân viên
+   - Tìm kiếm (không block UI)
+   - Xuất báo cáo CSV
+
+4. CHẤM CÔNG (All users)
+   - Check-in thực tế
+   - Check-out thực tế
+   - Xem lịch sử chấm công
+
+5. XEM LƯƠNG CỦA TÔI (User)
+   - Chi tiết lương cá nhân
+   - Breakdown thuế & bảo hiểm
+
+======================================================================
+📊 CÔNG THỨC TÍNH LƯƠNG
+======================================================================
+
+Lương Net = Lương Gross - Bảo Hiểm - Thuế PIT
+
+Ví dụ:
+  Lương Gross: 5,000,000 VND
+  Bảo Hiểm (6.5%): 325,000 VND
+  Thuế PIT: 0 VND (< mức giảm trừ)
+  ────────────────────────────
+  Lương Net: 4,675,000 VND
+
+======================================================================
+💾 CẤP NHẬT CODE
+======================================================================
+
+Khi sửa code trong src/:
+
+  1. Sửa file .java trong src/
+  2. Chạy: compile.bat
+     hoặc: javac -encoding UTF-8 -d bin src/*.java
+  3. Chạy: run.bat
+     hoặc: java -cp bin QLLuongVien
+
+======================================================================
+🔄 QUẢN LÝ PHIÊN BẢN (Nếu dùng Git)
+======================================================================
+
+.gitignore đã được cấu hình:
+  - Không commit thư mục bin/ (auto-generate)
+  - Không commit *.class files
+  - Không commit file CSV tạo ra
+
+Để push lên GitHub:
+  git add src/ *.bat *.ps1 *.md .gitignore
+  git commit -m "Cập nhật code"
+  git push
+
+======================================================================
+❓ CÓ LỖI?
+======================================================================
+
+Q1: "javac: command not found"
+A: Cần cài Java JDK (không phải JRE)
+   Download tại: https://www.oracle.com/java/technologies/downloads/
+
+Q2: "Main class QLLuongVien not found"
+A: Đảm bảo:
+   - Chạy từ thư mục 01-test/
+   - File QLLuongVien.class có trong bin/
+   - Dùng: java -cp bin QLLuongVien
+
+Q3: Ký tự Tiếng Việt hiển thị lạ
+A: Đảm bảo compile với: -encoding UTF-8
+   (Đã cấu hình sẵn trong compile.bat)
+
+======================================================================
+📚 TÀI LIỆU
+======================================================================
+
+- README.md          → Hướng dẫn chi tiết cấu trúc
+- QUICK_START.md     → Hướng dẫn chạy nhanh
+- HUONG_DAN_SU_DUNG.md → Hướng dẫn tính năng của ứng dụng
+
+======================================================================
+✅ CHECKLIST
+======================================================================
+
+[✓] Tách src/ và bin/ thành 2 thư mục riêng
+[✓] Compile -d bin tự động vào bin/
+[✓] File .java và .class kết nối được với nhau
+[✓] Tạo script run.bat để chạy dễ
+[✓] Tạo script compile.bat để biên dịch lại
+[✓] Tạo .gitignore để không commit bin/
+[✓] Tạo tài liệu hướng dẫn đầy đủ
+
+======================================================================
+Version: 2.0.0 | Updated: 2024-2025
+======================================================================

@@ -1,0 +1,292 @@
+═══════════════════════════════════════════════════════════════════════════════
+HƯỚNG DẪN TEST HỆ THỐNG QUẢN LÝ LƯƠNG V2.2
+═══════════════════════════════════════════════════════════════════════════════
+
+📋 BƯỚC 1: CHUẨN BỊ MÔI TRƯỜNG
+═══════════════════════════════════════════════════════════════════════════════
+
+✅ Yêu cầu:
+   - Java 11+ (kiểm tra: java -version)
+   - Windows (PowerShell)
+
+✅ Clone/Copy project:
+   c:\Users\VivoBook\Documents\java\project_JaVa\EmployeeSalaryManagement\System_01\
+
+═══════════════════════════════════════════════════════════════════════════════
+🚀 BƯỚC 2: CHẠY CHƯƠNG TRÌNH
+═══════════════════════════════════════════════════════════════════════════════
+
+Mở PowerShell và chạy:
+
+   cd System_01
+   .\compile.bat      # Compile lần đầu
+   .\run.bat          # Chạy ứng dụng
+
+Hoặc chạy trực tiếp:
+   
+   java -cp "bin;lib/*" com.payroll.view.QLLuongVien
+
+═══════════════════════════════════════════════════════════════════════════════
+👤 BƯỚC 3: ĐĂNG NHẬP (Test Accounts)
+═══════════════════════════════════════════════════════════════════════════════
+
+🔐 Tài khoản Admin (Quản lý):
+   Username: admin
+   Password: admin123
+   
+   ➜ Có quyền: Thêm/Xóa/Sửa nhân viên, Xuất báo cáo
+
+🔐 Tài khoản User (Nhân viên):
+   Username: user
+   Password: user123
+   
+   Username: user2
+   Password: pass123
+   
+   Username: user3
+   Password: pass123
+   
+   ➜ Có quyền: Xem lương riêng, Chấm công
+
+═══════════════════════════════════════════════════════════════════════════════
+🧪 BƯỚC 4: CÁC TEST CASE CHI TIẾT
+═══════════════════════════════════════════════════════════════════════════════
+
+─────────────────────────────────────────────────────────────────────────────
+TEST #1: ĐĂNG NHẬP VÀ PHÂN QUYỀN
+─────────────────────────────────────────────────────────────────────────────
+
+1️⃣ Test Login Thành Công (Admin):
+   ✓ Nhập: admin / admin123
+   ✓ Kỳ vọng: Vào được dashboard admin
+   ✓ Thấy: Tab "Quản Lý Nhân Viên" (chỉ admin)
+
+2️⃣ Test Login Thành Công (User):
+   ✓ Nhập: user / user123
+   ✓ Kỳ vọng: Vào được dashboard user
+   ✓ Thấy: Tab "Lương của tôi" (chỉ user)
+
+3️⃣ Test Login Sai:
+   ✓ Nhập: admin / sai_password
+   ✓ Kỳ vọng: Thấy lỗi "❌ Tên đăng nhập hoặc mật khẩu không đúng!"
+   ✓ Form login vẫn hiển thị để nhập lại
+
+─────────────────────────────────────────────────────────────────────────────
+TEST #2: QUẢN LÝ NHÂN VIÊN (Admin Only)
+─────────────────────────────────────────────────────────────────────────────
+
+1️⃣ Xem Danh Sách Nhân Viên:
+   ✓ Login: admin / admin123
+   ✓ Click: "📊 Xuất Toàn Bộ"
+   ✓ Kỳ vọng: Bảng hiển thị 4 nhân viên:
+      - 1001: Nguyễn Hoàng Hiệp (SalaryEmployee)
+      - 1002: Ngô Hồng Phúc (SalaryEmployee)
+      - 1003: Nguyễn Đào Minh Trúc (HourlyEmployee)
+      - 1004: Trần Lê Viết (DailyEmployee)
+
+2️⃣ Thêm Nhân Viên Mới:
+   ✓ Điền form:
+      - Mã NV: 1005
+      - Họ tên: Trần Văn Dương
+      - SĐT: 0945678901
+      - Tỉnh: Hà Nội
+      - Loại: Lương cố định
+      - Mức giá: 4500000
+   ✓ Click: "Thêm Nhân Viên"
+   ✓ Kỳ vọng: Thấy popup "✅ Thêm thành công!"
+   ✓ Verify: Bảng cập nhật có nhân viên mới
+   ✓ Lương Gross được tính: 4,500,000 VND
+
+3️⃣ Tìm Kiếm Nhân Viên:
+   ✓ Nhập keyword: "Nguyễn"
+   ✓ Click: "🔍 Tìm"
+   ✓ Kỳ vọng: Bảng chỉ hiển thị nhân viên có tên chứa "Nguyễn" (2-3 người)
+   ✓ Thống kê: "Kết quả tìm: X"
+
+4️⃣ Xóa Tất Cả Dữ Liệu:
+   ✓ Click: "🗑️ Xóa Tất Cả"
+   ✓ Confirm: Yes
+   ✓ Kỳ vọng: Bảng trống, count = 0
+   ⚠️ Lưu ý: Sau đó nên reload app để có dữ liệu lại
+
+─────────────────────────────────────────────────────────────────────────────
+TEST #3: TÍNH LƯƠNG (Salary Calculation)
+─────────────────────────────────────────────────────────────────────────────
+
+1️⃣ Kiểm Tra Lương Cố Định (Salary Employee):
+   ✓ Xem nhân viên ID 1001 (Nguyễn Hoàng Hiệp)
+   ✓ Kỳ vọng:
+      - Lương Gross: 3,000,000 VND
+      - Bảo hiểm (5% + 1.5%): 195,000 VND
+      - Thuế PIT: ~555,000 VND (tính theo bậc)
+      - Lương Net: ~2,250,000 VND
+
+2️⃣ Kiểm Tra Lương Theo Giờ (Hourly Employee):
+   ✓ Xem nhân viên ID 1003 (Nguyễn Đào Minh Trúc)
+   ✓ Kỳ vọng:
+      - Lương Gross: 50,000 × 160 = 8,000,000 VND
+      - Bảo hiểm: 520,000 VND
+      - Thuế PIT: ~2,300,000 VND
+      - Lương Net: ~5,180,000 VND
+
+3️⃣ Kiểm Tra Lương Theo Ngày (Daily Employee):
+   ✓ Xem nhân viên ID 1004 (Trần Lê Viết)
+   ✓ Kỳ vọng:
+      - Lương Gross: 100,000 × 20 = 2,000,000 VND
+      - Bảo hiểm: 130,000 VND
+      - Thuế PIT: ~420,000 VND
+      - Lương Net: ~1,450,000 VND
+
+─────────────────────────────────────────────────────────────────────────────
+TEST #4: CHẤM CÔNG (Attendance)
+─────────────────────────────────────────────────────────────────────────────
+
+1️⃣ Test Check-in:
+   ✓ Click: "🟢 Check-in"
+   ✓ Nhập mã NV: 1001
+   ✓ Kỳ vọng: Popup "✅ Check-in thành công lúc HH:mm:ss"
+
+2️⃣ Test Check-out:
+   ✓ Click: "🔴 Check-out"
+   ✓ Nhập mã NV: 1001
+   ✓ Kỳ vọng: Popup "✅ Check-out thành công lúc HH:mm:ss"
+   ✓ Hiển thị: "⏱️ Giờ làm việc: X.XX giờ"
+
+3️⃣ Xem Bảng Chấm Công:
+   ✓ Click: "📋 Xem Chấm Công"
+   ✓ Kỳ vọng: Bảng hiển thị các bản ghi check-in/check-out
+   ✓ Cột: Ngày, Mã NV, Tên NV, Check-in, Check-out, Giờ làm
+
+─────────────────────────────────────────────────────────────────────────────
+TEST #5: XEM LƯƠNG CÁ NHÂN (User Tab)
+─────────────────────────────────────────────────────────────────────────────
+
+1️⃣ Login với tài khoản user:
+   ✓ Username: user / Password: user123
+   ✓ Click tab: "💳 Lương của tôi"
+   ✓ Kỳ vọng: Hiển thị phiếu lương chi tiết
+      - Mã NV, Tên, Địa chỉ, SĐT
+      - Lương Gross, Chi tiết bảo hiểm
+      - Thuế PIT
+      - Lương Net (Thực lĩnh)
+      - Ngày xuất
+
+─────────────────────────────────────────────────────────────────────────────
+TEST #6: XUẤT DỮ LIỆU (Export CSV)
+─────────────────────────────────────────────────────────────────────────────
+
+1️⃣ Xuất File CSV:
+   ✓ Admin login: admin / admin123
+   ✓ Click: "📁 Xuất CSV"
+   ✓ Kỳ vọng: 
+      - File được tạo: DanhSachLuongNhanVien_YYYYMMDD_HHmmss.csv
+      - Popup: "✅ Xuất file CSV thành công!"
+   ✓ Verify: File có thể mở bằng Excel
+      - Cột: Mã NV, Tên, SĐT, Tỉnh, Loại, Mức Giá, Gross, BH, Thuế, Net
+      - Dòng cuối: Thống kê tổng cộng
+
+─────────────────────────────────────────────────────────────────────────────
+TEST #7: BẢNG LƯƠNG THAM KHẢO
+─────────────────────────────────────────────────────────────────────────────
+
+1️⃣ Xem Bảng Tham Khảo:
+   ✓ Click tab: "📊 Bảng Lương Tham Khảo"
+   ✓ Kỳ vọng: Bảng hiển thị 6 dòng tham khảo:
+      - Lương cố định (Nhân viên): 1,000,000 - 3,000,000 VND/tháng
+      - Lương cố định (Trưởng phòng): 3,000,000 - 5,000,000 VND/tháng
+      - Trả theo giờ (Thường): 30,000 - 50,000 VND/giờ
+      - Trả theo giờ (Chuyên môn): 50,000 - 100,000 VND/giờ
+      - Trả theo ngày (Phổ thông): 100,000 - 150,000 VND/ngày
+      - Trả theo ngày (Kỹ thuật): 200,000 - 300,000 VND/ngày
+
+─────────────────────────────────────────────────────────────────────────────
+TEST #8: ĐĂNG XUẤT
+─────────────────────────────────────────────────────────────────────────────
+
+1️⃣ Test Logout:
+   ✓ Click: "🚪 Đăng xuất"
+   ✓ Confirm: Yes
+   ✓ Kỳ vọng: Quay lại login screen
+
+═══════════════════════════════════════════════════════════════════════════════
+📊 BƯỚC 5: KIỂM ĐỊNH DỮ LIỆU DATABASE
+═══════════════════════════════════════════════════════════════════════════════
+
+Chạy utility để xem thống kê database:
+
+   java -cp "bin;lib/*" com.payroll.util.DatabaseStats
+
+Kỳ vọng output:
+   📊 Tổng số nhân viên: 4
+   📋 DANH SÁCH NHÂN VIÊN:
+      ID: 1001 | Tên: Nguyễn Hoàng Hiệp | User: admin | Loại: SalaryEmployee
+      ID: 1002 | Tên: Ngô Hồng Phúc | User: user | Loại: SalaryEmployee
+      ID: 1003 | Tên: Nguyễn Đào Minh Trúc | User: user2 | Loại: HourlyEmployee
+      ID: 1004 | Tên: Trần Lê Viết | User: user3 | Loại: DailyEmployee
+   📊 Tổng số bản ghi chấm công: 0+ (phụ thuộc test)
+
+═══════════════════════════════════════════════════════════════════════════════
+🧪 BƯỚC 6: TEST REGISTER FEATURE
+═══════════════════════════════════════════════════════════════════════════════
+
+1️⃣ Chạy test register:
+   java -cp "bin;lib/*" com.payroll.util.TestRegisterFeature
+
+   Kỳ vọng: 
+   ✅ All tests passed!
+   ✅ Password verification successful
+
+2️⃣ Hoặc test manual từ login screen:
+   - Click: "Tạo tài khoản"
+   - Điền form tạo người dùng mới
+   - Verify: Tài khoản được tạo và có thể đăng nhập
+
+═══════════════════════════════════════════════════════════════════════════════
+⚠️ BƯỚC 7: TROUBLESHOOTING
+═══════════════════════════════════════════════════════════════════════════════
+
+❌ Lỗi: "Class not found"
+   ✓ Giải pháp: Chạy compile.bat trước
+   
+❌ Lỗi: "SQLite driver not found"
+   ✓ Giải pháp: Kiểm tra folder lib/ có file sqlite-jdbc-3.44.0.0.jar
+
+❌ GUI không hiển thị
+   ✓ Giải pháp: Kiểm tra console có warning từ SQLite (bình thường)
+
+❌ Login không được
+   ✓ Giải pháp: Kiểm tra username/password đúng (bảng ở trên)
+
+❌ Không chạy được batch file
+   ✓ Giải pháp: Sử dụng lệnh java trực tiếp:
+      java -cp "bin;lib/*" com.payroll.view.QLLuongVien
+
+═══════════════════════════════════════════════════════════════════════════════
+✅ CHECKLIST TEST HOÀN CHỈNH
+═══════════════════════════════════════════════════════════════════════════════
+
+□ Login/Logout hoạt động
+□ Phân quyền Admin/User đúng
+□ Xem danh sách nhân viên
+□ Thêm nhân viên mới
+□ Tìm kiếm nhân viên
+□ Tính lương 3 loại nhân viên đúng
+□ Check-in/Check-out hoạt động
+□ Xem bảng chấm công
+□ Xem lương cá nhân (User view)
+□ Xuất CSV thành công
+□ Xem bảng tham khảo
+□ Database lưu dữ liệu đúng
+□ Test register feature
+
+═══════════════════════════════════════════════════════════════════════════════
+📧 HỖ TRỢ
+═══════════════════════════════════════════════════════════════════════════════
+
+Nếu có vấn đề:
+1. Kiểm tra console output xem có error message
+2. Xem file log nếu có
+3. Thử compile lại: .\compile.bat
+4. Restart app
+
+═══════════════════════════════════════════════════════════════════════════════

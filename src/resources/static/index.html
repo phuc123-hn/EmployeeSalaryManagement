@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HỆ THỐNG QUẢN LÝ LƯƠNG</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            padding: 40px;
+        }
+        .login-title {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+        .form-control {
+            border-radius: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+        }
+        .btn-login {
+            width: 100%;
+            padding: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .btn-login:hover {
+            opacity: 0.9;
+        }
+        .alert-message {
+            display: none;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+        #dashboard {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- LOGIN SCREEN -->
+    <div id="loginScreen" class="login-container">
+        <div class="login-title">
+            <h2>🏢 QUẢN LÝ LƯƠNG</h2>
+            <p style="font-size: 14px; color: #999;">Phiên bản 2.2 Web</p>
+        </div>
+        
+        <div id="loginAlert" class="alert-message"></div>
+        
+        <form id="loginForm" onsubmit="handleLogin(event)">
+            <div class="mb-3">
+                <label class="form-label">Tên đăng nhập</label>
+                <input type="text" id="username" class="form-control" placeholder="admin" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Mật khẩu</label>
+                <input type="password" id="password" class="form-control" placeholder="•••••••" required>
+            </div>
+            <button type="submit" class="btn-login">ĐĂNG NHẬP</button>
+        </form>
+        
+        <div style="margin-top: 20px; padding: 15px; background: #f0f0f0; border-radius: 5px; font-size: 12px;">
+            <strong>Tài khoản test:</strong>
+            <p>👤 admin / admin123 (Admin)</p>
+            <p>👤 user / user123 (User)</p>
+            <p>👤 user2 / pass123 (User)</p>
+        </div>
+    </div>
+
+    <!-- DASHBOARD SCREEN -->
+    <div id="dashboard" class="container-fluid mt-4">
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <h2 id="welcomeTitle"></h2>
+            </div>
+            <div class="col-md-4 text-end">
+                <button class="btn btn-danger" onclick="logout()">🚪 Đăng xuất</button>
+            </div>
+        </div>
+
+        <!-- TABS -->
+        <div class="card">
+            <div class="card-body">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item" id="adminTab" style="display: none;">
+                        <a class="nav-link active" data-bs-toggle="tab" href="#staffTab">👨‍💼 Quản Lý Nhân Viên</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#salaryTab">💰 Lương Của Tôi</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#referenceTab">📊 Bảng Tham Khảo</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content mt-4">
+                    <!-- STAFF MANAGEMENT TAB -->
+                    <div id="staffTab" class="tab-pane fade show active">
+                        <h4>Quản Lý Nhân Viên</h4>
+                        
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h5>Thêm Nhân Viên Mới</h5>
+                                <form id="addEmployeeForm" onsubmit="handleAddEmployee(event)">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-2">
+                                            <input type="text" id="empName" class="form-control" placeholder="Họ tên" required>
+                                        </div>
+                                        <div class="col-md-6 mb-2">
+                                            <input type="tel" id="empPhone" class="form-control" placeholder="Số điện thoại" required>
+                                        </div>
+                                        <div class="col-md-6 mb-2">
+                                            <input type="text" id="empAddress" class="form-control" placeholder="Địa chỉ" required>
+                                        </div>
+                                        <div class="col-md-6 mb-2">
+                                            <select id="empType" class="form-control" required>
+                                                <option value="">-- Chọn loại --</option>
+                                                <option value="Salary">Lương cố định</option>
+                                                <option value="Hourly">Trả theo giờ</option>
+                                                <option value="Daily">Trả theo ngày</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 mb-2">
+                                            <input type="number" id="empRate" class="form-control" placeholder="Mức lương/giá" required>
+                                        </div>
+                                        <div class="col-md-6 mb-2">
+                                            <button type="submit" class="btn btn-success w-100">➕ Thêm Nhân Viên</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div id="addEmployeeAlert" class="alert-message"></div>
+
+                        <h5 class="mt-4">Danh Sách Nhân Viên</h5>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Mã NV</th>
+                                        <th>Tên</th>
+                                        <th>SĐT</th>
+                                        <th>Địa chỉ</th>
+                                        <th>Loại</th>
+                                        <th>Lương Gross</th>
+                                        <th>Lương Net</th>
+                                        <th>Hành động</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="employeeTable">
+                                    <tr><td colspan="8" class="text-center">Đang tải...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- SALARY TAB -->
+                    <div id="salaryTab" class="tab-pane fade">
+                        <h4>Phiếu Lương Cá Nhân</h4>
+                        <div class="card">
+                            <div class="card-body">
+                                <div id="payslip" style="font-family: monospace; white-space: pre-wrap; background: #f5f5f5; padding: 20px; border-radius: 5px;">
+                                    Đang tải...
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- REFERENCE TAB -->
+                    <div id="referenceTab" class="tab-pane fade">
+                        <h4>Bảng Lương Tham Khảo</h4>
+                        <table class="table table-bordered">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Chức vụ/Loại</th>
+                                    <th>Mức Lương Tham Khảo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Lương cố định (Nhân viên)</td>
+                                    <td>1,000,000 - 3,000,000 VND/tháng</td>
+                                </tr>
+                                <tr>
+                                    <td>Lương cố định (Trưởng phòng)</td>
+                                    <td>3,000,000 - 5,000,000 VND/tháng</td>
+                                </tr>
+                                <tr>
+                                    <td>Trả theo giờ (Thường)</td>
+                                    <td>30,000 - 50,000 VND/giờ</td>
+                                </tr>
+                                <tr>
+                                    <td>Trả theo giờ (Chuyên môn)</td>
+                                    <td>50,000 - 100,000 VND/giờ</td>
+                                </tr>
+                                <tr>
+                                    <td>Trả theo ngày (Phổ thông)</td>
+                                    <td>100,000 - 150,000 VND/ngày</td>
+                                </tr>
+                                <tr>
+                                    <td>Trả theo ngày (Kỹ thuật)</td>
+                                    <td>200,000 - 300,000 VND/ngày</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let currentUser = null;
+        let currentRole = null;
+        let currentEmployeeId = null;
+
+        function handleLogin(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            fetch('/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            })
+            .then(r => r.json())
+            .then(data => {
+                const alert = document.getElementById('loginAlert');
+                if (data.success) {
+                    currentUser = data.username;
+                    currentRole = data.role;
+                    currentEmployeeId = data.employeeId;
+                    
+                    document.getElementById('welcomeTitle').innerText = `👋 Chào mừng ${data.name} (${data.role})`;
+                    document.getElementById('loginScreen').style.display = 'none';
+                    document.getElementById('dashboard').style.display = 'block';
+                    
+                    if (data.role === 'ADMIN') {
+                        document.getElementById('adminTab').style.display = 'block';
+                        loadEmployees();
+                    } else {
+                        document.getElementById('adminTab').style.display = 'none';
+                        loadMySalary();
+                    }
+                } else {
+                    alert.className = 'alert alert-danger alert-message';
+                    alert.innerText = data.message;
+                    alert.style.display = 'block';
+                }
+            });
+        }
+
+        function loadEmployees() {
+            fetch('/api/employees')
+                .then(r => r.json())
+                .then(data => {
+                    const tbody = document.getElementById('employeeTable');
+                    tbody.innerHTML = '';
+                    
+                    data.employees.forEach(emp => {
+                        const grossSalary = emp.grossSalary || (emp.calculateGrossSalary ? emp.calculateGrossSalary() : 0);
+                        const netSalary = emp.netSalary || (emp.calculateNetSalary ? emp.calculateNetSalary() : 0);
+                        
+                        const row = `
+                            <tr>
+                                <td>${emp.id}</td>
+                                <td>${emp.name}</td>
+                                <td>${emp.phone}</td>
+                                <td>${emp.address}</td>
+                                <td>${getEmployeeType(emp)}</td>
+                                <td>${Math.round(grossSalary).toLocaleString('vi-VN')}</td>
+                                <td>${Math.round(netSalary).toLocaleString('vi-VN')}</td>
+                                <td>
+                                    <button class="btn btn-sm btn-danger" onclick="deleteEmployee(${emp.id})">🗑️</button>
+                                </td>
+                            </tr>
+                        `;
+                        tbody.innerHTML += row;
+                    });
+                });
+        }
+
+        function getEmployeeType(emp) {
+            if (emp.class && emp.class.includes('SalaryEmployee')) return 'Lương cố định';
+            if (emp.class && emp.class.includes('HourlyEmployee')) return 'Trả theo giờ';
+            if (emp.class && emp.class.includes('DailyEmployee')) return 'Trả theo ngày';
+            return 'N/A';
+        }
+
+        function handleAddEmployee(event) {
+            event.preventDefault();
+            const name = document.getElementById('empName').value;
+            const phone = document.getElementById('empPhone').value;
+            const address = document.getElementById('empAddress').value;
+            const type = document.getElementById('empType').value;
+            const rate = document.getElementById('empRate').value;
+
+            fetch('/api/employees', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name, phone, address,
+                    type: type,
+                    salary: type === 'Salary' ? parseFloat(rate) : 0,
+                    rate: type !== 'Salary' ? parseFloat(rate) : 0
+                })
+            })
+            .then(r => r.json())
+            .then(data => {
+                const alert = document.getElementById('addEmployeeAlert');
+                alert.className = data.success ? 'alert alert-success' : 'alert alert-danger';
+                alert.innerText = data.message;
+                alert.style.display = 'block';
+                
+                if (data.success) {
+                    document.getElementById('addEmployeeForm').reset();
+                    setTimeout(() => loadEmployees(), 1000);
+                }
+            });
+        }
+
+        function deleteEmployee(id) {
+            if (confirm('Xóa nhân viên này?')) {
+                fetch(`/api/employees/${id}`, { method: 'DELETE' })
+                    .then(r => r.json())
+                    .then(data => {
+                        alert(data.message);
+                        loadEmployees();
+                    });
+            }
+        }
+
+        function loadMySalary() {
+            fetch(`/api/salary/${currentEmployeeId}`)
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('payslip').innerText = `
+================== PHIẾU LƯƠNG ==================
+Mã NV: ${data.employeeId}
+Tên: ${data.name}
+Địa chỉ: ${data.address}
+SĐT: ${data.phone}
+================================================
+
+LƯƠNG GROSS (Brutto): ${Math.round(data.grossSalary).toLocaleString('vi-VN')} VND
+Bảo hiểm:             ${Math.round(data.insurance).toLocaleString('vi-VN')} VND
+Thuế PIT:             ${Math.round(data.tax).toLocaleString('vi-VN')} VND
+================================================
+LƯƠNG NET (Thực lĩnh): ${Math.round(data.netSalary).toLocaleString('vi-VN')} VND
+================================================
+                        `;
+                    }
+                });
+        }
+
+        function logout() {
+            if (confirm('Đăng xuất?')) {
+                currentUser = null;
+                currentRole = null;
+                document.getElementById('loginScreen').style.display = 'block';
+                document.getElementById('dashboard').style.display = 'none';
+                document.getElementById('loginForm').reset();
+            }
+        }
+    </script>
+</body>
+</html>

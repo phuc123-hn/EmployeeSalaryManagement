@@ -1,0 +1,50 @@
+═══════════════════════════════════════════════════════════════════════════════
+CHUYỂN HỆ THỐNG SANG WEB (Spring Boot + HTML)
+═══════════════════════════════════════════════════════════════════════════════
+
+✅ ĐÃ TẠO:
+
+1. PayrollWebApplication.java
+   - Spring Boot starter
+   - ComponentScan cho com.payroll packages
+
+2. PayrollController.java
+   - REST API endpoints:
+     * GET /api/employees - Danh sách nhân viên
+     * GET /api/employees/{id} - Chi tiết nhân viên
+     * POST /api/employees - Thêm nhân viên
+     * DELETE /api/employees/{id} - Xóa nhân viên
+     * POST /api/login - Đăng nhập
+     * GET /api/salary/{employeeId} - Xem lương
+
+3. index.html
+   - Web UI đầy đủ
+   - Login screen
+   - Dashboard với 3 tabs:
+     * Quản Lý Nhân Viên (Admin only)
+     * Lương Của Tôi (User)
+     * Bảng Tham Khảo
+
+4. application.properties
+   - Port: 8080
+   - SQLite database config
+
+═══════════════════════════════════════════════════════════════════════════════
+📦 CỐ GẮNG NHANH NHẤT - KHÔNG CẦN DOWNLOAD:
+═══════════════════════════════════════════════════════════════════════════════
+
+Cách tôi sẽ làm:
+
+1. TẢI Spring Boot embedded JAR từ Maven Central
+2. Compile toàn bộ cùng Spring Boot dependencies
+3. Tạo 1 FAT JAR có sẵn tất cả
+
+RẤT ĐƠN GIẢN - chỉ cần:
+   java -jar payroll-web.jar
+   → Truy cập http://localhost:8080
+
+═══════════════════════════════════════════════════════════════════════════════
+
+Bạn chờ tôi tải Spring Boot libraries...
+
+═══════════════════════════════════════════════════════════════════════════════
